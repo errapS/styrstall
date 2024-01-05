@@ -1,0 +1,7 @@
+locations:
+  - location_name: styrstall_dagster
+    code_source:
+      package_name: styrstall_dagster
+
+run_queue:
+  max_concurrent: 1

@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: stg_stations
+    description: staging stations data
+
+    columns:
+      - name: station_id
+        description: something else
+        
+  - name: stg_weather
+    description: staging weather data
+
+    columns:
+      - name: reference_time
+        description: something

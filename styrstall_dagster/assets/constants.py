@@ -1,0 +1,9 @@
+RAW_STATIONS_TEMPLATE_FILE_NAME = "stations_{}.json"
+
+STG_STATIONS_TEMPLATE_FILE_NAME="stations_{}.parquet"
+
+RAW_WEATHER_TEMPLATE_FILE_NAME = "weather_{}.json"
+
+STG_WEATHER_TEMPLATE_FILE_NAME = "weather_{}.parquet"
+
+START_DATE = "20231101"

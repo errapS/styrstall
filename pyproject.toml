@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "styrstall"
+version = "0.1.0"
+description = ""
+authors = ["erraps"]
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "3.10.12"
+requests = "^2.31.0"
+urllib3 = "1.26.17"
+dagster = "^1.4.16"
+dagit = "^1.4.16"
+duckdb = "^0.9.0"
+plotly = "^5.18.0"
+geopandas = "^0.14.0"
+kaleido = "0.2.1"
+pandas = "^2.1.2"
+dagster-duckdb = "^0.21.6"
+pyarrow = "^14.0.1"
+dagster-webserver = "^1.5.6"
+dbt-core="^1.6.0"
+dbt-duckdb = "1.6.0"
+dagster-dbt = "^0.21.6"
+azure-storage-blob = "^12.19.0"
+folium = "^0.15.0"
+ipykernel = "^6.27.0"
+jupyter = "^1.0.0"
+pandoc = "^2.3"
+matplotlib = "^3.8.2"
+networkx = "^3.2.1"
+osmnx = "^1.7.1"
+scikit-learn = "^1.3.2"
+polyline = "^2.0.1"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.dagster]
+module_name = "styrstall_dagster"
+code_location = "styrstall"

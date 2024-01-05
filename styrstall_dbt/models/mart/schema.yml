@@ -1,0 +1,106 @@
+version: 2
+
+models:
+  - name: bike_data
+    description: bike_id, station_id, date_time
+
+    columns:
+      - name: bike_id
+        description: integer
+      - name: station_id
+        description: integer
+      - name: date_time
+        description: timestamp
+
+        
+  - name: stations_data
+    description: station_id, available_bikes, bike_delta, date_time
+
+    columns:
+      - name: station_id
+        description: integer
+      - name: available_bikes
+        description: integer
+      - name: bike_delta
+        description: integer - *difference of available bikes since last record*
+      - name: date_time
+        description: timestamp
+
+
+  - name: stations
+    description: station_id, name, lat, long, closest_station_id, closest_station_name, closest_station_lat, closest_station_long, distance
+
+    columns:
+      - name: station_id
+        description: integer
+      - name: name
+        description: varchar - *name of the station*
+      - name: lat
+        description: double - *latitude for the station*
+      - name: long
+        description: double - *longitude for the station*
+      - name: closest_station_id
+        description: integer - *station id of the closest station by distance*
+      - name: closest_station_name
+        description: varchar - *name of the closest station*
+      - name: closest_station_lat
+        description: double - *latitude of the closest station*
+      - name: closest_station_ong
+        description: double - *longitude of the closest station*
+      - name: distance
+        description: double - *distance between the stations in meters*
+
+  - name: trips_by_station
+    description: station_id, lat, long, start_time, total_trips, cumulative_trips, total_distance, avg_trip_time_minutes
+
+    columns:
+      - name: station_id
+        description: integer
+      - name: lat
+        description: double
+      - name: long
+        description: double
+      - name: start_time
+        description: timestamp - *time of the record??? name*
+      - name: total_trips
+        description: integer - *total trips for that record until the next*
+      - name: cumulative_trips
+        description: integer - *cumulative sum of trips for that station*
+      - name: total_distance
+        description: double - *total distance people have biked to that station*
+      - name: avg_trip_time_minutes
+        description: double
+
+
+  - name: trips
+    description: bike_id, start_station_id, start_station_name, start_lat, start_long, start_time, end_station_id, end_station_name, end_lat, end_long, end_time, trip_distance, trip_time_minutes, dayofweek
+
+    columns:
+      - name: bike_id
+        description: integer
+      - name: start_station_id
+        description: integer
+      - name: start_station_name
+        description: varchar
+      - name: start_lat
+        description: double
+      - name: start_long
+        description: double
+      - name: start_time
+        description: timestamp
+      - name: end_station_id
+        description: integer
+      - name: end_station_name
+        description: varchar
+      - name: end_lat
+        description: double
+      - name: end_long
+        description: double
+      - name: end_time
+        description: timestamp
+      - name: trip_distance
+        description: double - *haversine distance between the stations in meters*
+      - name: trip_time_minutes
+        description: integer
+      - name: dayofweek
+        description: integer - *0-6 representing a day of the week (Sunday-Saturday)*
