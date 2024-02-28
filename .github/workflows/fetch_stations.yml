@@ -11,9 +11,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      with:
-        sparse-checkout: |
-          .github
     - name: Set up Python 3.10
       uses: actions/setup-python@v5
       with:
@@ -23,10 +20,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests azure-storage-blob
     - name: Get directory
-      run: cat README.md
+      run: ls
     - name: Execute Python script
       env:
         STYRSTALL_API_KEY: ${{ secrets.STYRSTALL_API_KEY }}
         AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
       run: |
-        python /home/runner/work/styrstall/workflows/fetch_stations.py
+        python fetch_stations.py
