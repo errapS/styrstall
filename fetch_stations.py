@@ -35,12 +35,11 @@ def upload_to_blob_storage(data, file_name, container_name, blob_prefix=""):
 
 
 def raw_stations_blob():
-    api_key = os.getenv('API_KEY')
-    print('FETCHING..............', api_key)
+    api_key = os.getenv('STYRSTALL_API_KEY')
     raw_stations = requests.get(
         f"https://data.goteborg.se/SelfServiceBicycleService/v2.0/Stations/{api_key}?format=json"
     ).json()
-    print('DONE', raw_stations)
+
     last_update = convert_timestamp(raw_stations[0].get("LastUpdate", "")).strftime('%Y%m%d_%H%M')
     file_name = RAW_STATIONS_TEMPLATE_FILE_NAME.format(last_update)
     data_str = json.dumps(raw_stations)
