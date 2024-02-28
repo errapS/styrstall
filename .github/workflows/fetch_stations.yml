@@ -24,4 +24,4 @@ jobs:
         STYRSTALL_API_KEY: ${{ secrets.STYRSTALL_API_KEY }}
         AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
       run: |
-        python fetch_stations.py
+        python $GITHUB_WORKSPACE/workflows/fetch_stations.py
