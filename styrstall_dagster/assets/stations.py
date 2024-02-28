@@ -15,7 +15,7 @@ from .helpers import convert_timestamp, upload_to_blob_storage, read_files_from_
 
 
 @asset(
-    group_name="raw_files"
+    group_name="ingestion"
 )
 def raw_stations_blob():
 
@@ -33,7 +33,7 @@ def raw_stations_blob():
 
 @asset(
     deps=["raw_stations_blob"],
-    group_name="raw_files",
+    group_name="ingestion",
 )
 def raw_stations_parquet():
 
@@ -54,26 +54,27 @@ def raw_stations_parquet():
 @asset(
     deps=["raw_stations_parquet"],
     # partitions_def=monthly_partition,
-    group_name="staging", 
+    group_name="raw", 
 )
 def raw_stations(database: DuckDBResource):
     """
       The raw stations dataset, loaded into a DuckDB database, partitioned by month.
     """
 
-    # partition_date_str = context.asset_partition_key_for_output()
-    # month_to_fetch = partition_date_str[:-3]
-
-    month_to_fetch = '202311'
-    parquet_df = read_single_blob('stg', f"stations/{constants.STG_STATIONS_TEMPLATE_FILE_NAME.format(month_to_fetch)}")
-
     # FIX CERT ISSUE https://github.com/duckdb/duckdb_azure/issues/8
     # LOAD azure;
     # SET azure_storage_connection_string = '{os.getenv('AZURE_STORAGE_CONNECTION_STRING')}';
     # 'azure://stg/stations/stations_{month_to_fetch}.parquet'
+    # partition_date_str = context.asset_partition_key_for_output()
+    
+    # month_to_fetch = partition_date_str[:-3]
+
+    month_to_fetch = '202401'
+    parquet_df = read_single_blob('stg', f"stations/{constants.STG_STATIONS_TEMPLATE_FILE_NAME.format(month_to_fetch)}")
+
 
     query = f"""
-        CREATE TABLE IF NOT EXISTS main_raw.raw_stations (
+        CREATE TABLE IF NOT EXISTS raw_stations (
             station_id INTEGER,
             name VARCHAR,
             lat DOUBLE,
@@ -85,9 +86,9 @@ def raw_stations(database: DuckDBResource):
             partition_date VARCHAR
         );
 
-        DELETE FROM main_raw.raw_stations WHERE partition_date = '{month_to_fetch}';
+        DELETE FROM raw_stations WHERE partition_date = '202311';
 
-        INSERT INTO main_raw.raw_stations
+        INSERT INTO raw_stations
         SELECT
             CAST(StationID AS INTEGER) AS station_id,
             CAST(Name AS VARCHAR) AS name,
@@ -105,18 +106,3 @@ def raw_stations(database: DuckDBResource):
     with database.get_connection() as conn:
       conn.execute(query)
 
-
-dbt_project_dir = Path(__file__).joinpath("..", "..","..","styrstall_dbt").resolve()
-dbt = DbtCliResource(project_dir=os.fspath(dbt_project_dir),profiles_dir=os.fspath(dbt_project_dir))
-
-if os.getenv("DAGSTER_DBT_PARSE_PROJECT_ON_LOAD"):
-    dbt_parse_invocation = dbt.cli(["parse"]).wait()
-    dbt_manifest_path = dbt_parse_invocation.target_path.joinpath("manifest.json")
-else:
-    dbt_manifest_path = dbt_project_dir.joinpath("target", "manifest.json")
-
-@dbt_assets(
-        manifest=dbt_manifest_path
-)
-def stations_dbt(context: AssetExecutionContext):
-    yield from dbt.cli(["build"], context=context).stream()

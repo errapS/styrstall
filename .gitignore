@@ -5,9 +5,14 @@
 *.parquet
 *.log
 *.db
+*.wal
+dev.duckdb.tmp/
 poetry.lock
 cache/
 data/
 test.py
 .ipynb_checkpoints/
 __pycache__
+dagster_home/storage/
+styrstall_evidence/
+styrstall_dbt/target/

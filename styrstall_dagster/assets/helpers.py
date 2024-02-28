@@ -5,6 +5,7 @@ import pandas as pd
 import pyarrow.parquet as pq
 from io import BytesIO
 
+
 def convert_timestamp(timestamp_str):
     timestamp_str = timestamp_str.split('(')[1].split(')')[0]
     timestamp = int(timestamp_str[:-5])
@@ -68,14 +69,7 @@ def read_single_blob(container_name, blob_path):
     blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_path)
     blob_data = blob_client.download_blob()
 
-    # parquet_file = pq.ParquetFile(BytesIO(blob_data.readall()))
-
     df = pd.read_parquet(BytesIO(blob_data.readall()))
 
     return df
-    # table = parquet_file.read_row_group(0).to_pandas()
 
-    # # Convert the pandas DataFrame to a dictionary
-    # data = table.to_dict(orient='records')
-
-    # return data

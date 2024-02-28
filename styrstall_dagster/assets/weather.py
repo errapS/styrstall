@@ -13,7 +13,7 @@ from .helpers import upload_to_blob_storage, read_files_from_blob, read_single_b
 
 
 @asset(
-    group_name="raw_files"
+    group_name="ingestion"
 )
 def raw_weather_blob():
     client_id = os.getenv('WEATHER_API_KEY')
@@ -38,7 +38,7 @@ def raw_weather_blob():
 
 @asset(
     deps=["raw_weather_blob"],
-    group_name="raw_files",
+    group_name="ingestion",
 )
 def raw_weather_parquet():
     # month = (datetime.utcnow() - relativedelta(months=1)).strftime('%Y%m')
@@ -65,7 +65,7 @@ def raw_weather_parquet():
 @asset(
     deps=["raw_weather_parquet"],
     # partitions_def=monthly_partition,
-    group_name="staging", 
+    group_name="raw", 
 )
 def raw_weather(database: DuckDBResource):
     """
@@ -75,7 +75,7 @@ def raw_weather(database: DuckDBResource):
     # partition_date_str = context.asset_partition_key_for_output()
     # month_to_fetch = partition_date_str[:-3]
 
-    month_to_fetch = '202311'
+    month_to_fetch = '202401'
     parquet_df = read_single_blob('stg', f"weather/{constants.STG_WEATHER_TEMPLATE_FILE_NAME.format(month_to_fetch)}")
 
     # FIX CERT ISSUE https://github.com/duckdb/duckdb_azure/issues/8
@@ -84,7 +84,7 @@ def raw_weather(database: DuckDBResource):
     # 'azure://stg/stations/stations_{month_to_fetch}.parquet'
 
     query = f"""
-        CREATE TABLE IF NOT EXISTS main_raw.raw_weather (
+        CREATE TABLE IF NOT EXISTS raw_weather (
             source_id VARCHAR,
             reference_time TIMESTAMP,
             element VARCHAR,
@@ -94,9 +94,9 @@ def raw_weather(database: DuckDBResource):
             partition_date VARCHAR
         );
 
-        DELETE FROM main_raw.raw_weather WHERE partition_date = '{month_to_fetch}';
+        DELETE FROM raw_weather WHERE partition_date = '{month_to_fetch}';
 
-        INSERT INTO main_raw.raw_weather
+        INSERT INTO raw_weather
         SELECT
             CAST(sourceId AS VARCHAR) AS source_id,
             CAST(referenceTime AS  TIMESTAMP) AS reference_time,
