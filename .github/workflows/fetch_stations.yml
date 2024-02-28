@@ -12,6 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
+        repository: 'errapS/styrstall'
+        ref: 'main'
         sparse-checkout: |
           fetch_stations.py
         sparse-checkout-cone-mode: false
