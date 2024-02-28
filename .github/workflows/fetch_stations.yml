@@ -24,6 +24,7 @@ jobs:
         pip install requests azure-storage-blob
     - name: Get directory
       run: ls
+        cat README.md
     - name: Execute Python script
       env:
         STYRSTALL_API_KEY: ${{ secrets.STYRSTALL_API_KEY }}
