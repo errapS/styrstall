@@ -6,7 +6,7 @@ from azure.storage.blob import BlobServiceClient
 
 
 RAW_STATIONS_TEMPLATE_FILE_NAME = "stations_{}.json"
-CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;AccountName=styrstallstorage;AccountKey={}==;EndpointSuffix=core.windows.net
+CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;AccountName=styrstallstorage;AccountKey={}==;EndpointSuffix=core.windows.net"
 
 def convert_timestamp(timestamp_str):
     timestamp_str = timestamp_str.split('(')[1].split(')')[0]
