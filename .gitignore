@@ -7,7 +7,6 @@
 *.db
 *.wal
 dev.duckdb.tmp/
-poetry.lock
 cache/
 data/
 test.py
